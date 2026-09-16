@@ -23,6 +23,7 @@ export default async function PaymentReturnPage({
   const zoneLabel = get('z') || undefined
   const deliveryFeeRaw = get('f')
   const deliveryFee = deliveryFeeRaw ? Math.max(0, Math.floor(Number(deliveryFeeRaw))) : undefined
+  const approxDelivery = get('x') === '1'
   const quantity = Math.max(1, Math.floor(Number(get('q')) || 1))
   const subtotal = Math.max(0, Math.floor(Number(get('a')) || SITE.price * quantity))
 
@@ -33,6 +34,7 @@ export default async function PaymentReturnPage({
     location,
     zoneLabel,
     deliveryFee,
+    approxDelivery,
     subtotal,
     paid: true,
     reference,
@@ -70,8 +72,10 @@ export default async function PaymentReturnPage({
         {location ? <Row label="Adresse précise" value={location} /> : null}
         {typeof deliveryFee === 'number' ? (
           <Row
-            label="Frais de livraison"
-            value={`${deliveryFee.toLocaleString('fr-FR')} ${SITE.currency} (à régler à la livraison)`}
+            label={approxDelivery ? 'Frais de livraison (estimés)' : 'Frais de livraison'}
+            value={`${approxDelivery ? 'à partir de ' : ''}${deliveryFee.toLocaleString(
+              'fr-FR',
+            )} ${SITE.currency} (à régler à la livraison)`}
           />
         ) : null}
       </dl>
