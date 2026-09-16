@@ -98,12 +98,12 @@ export function OrderForm() {
       location: location.trim(),
       zoneLabel: zone?.label,
       deliveryFee: zone?.fee,
+      approxDelivery: zone?.approx,
       subtotal,
     })
     fbTrack('Contact', { method: 'whatsapp' })
     window.open(buildWhatsAppLink(message), '_blank', 'noopener,noreferrer')
   }
-
   return (
     <section id="commander" className="scroll-mt-4 px-4 py-12">
       <div className="mx-auto max-w-md">
@@ -192,7 +192,6 @@ export function OrderForm() {
               </button>
             </div>
           </div>
-
           {/* Quartier / zone de livraison */}
           <div className="mt-4">
             <label
@@ -221,7 +220,8 @@ export function OrderForm() {
                 </option>
                 {DELIVERY_ZONES.map((z) => (
                   <option key={z.id} value={z.id}>
-                    {z.label} — livraison {z.fee.toLocaleString('fr-FR')} {SITE.currency}
+                    {z.label} — livraison {z.approx ? 'à partir de ' : ''}
+                    {z.fee.toLocaleString('fr-FR')} {SITE.currency}
                   </option>
                 ))}
               </select>
@@ -268,7 +268,6 @@ export function OrderForm() {
               />
             </div>
           </div>
-
           {/* Récap */}
           <dl className="mt-5 space-y-1.5 rounded-xl bg-muted/60 p-3 text-sm">
             <div className="flex justify-between">
@@ -285,14 +284,17 @@ export function OrderForm() {
               </dt>
               <dd className="font-semibold text-accent">
                 {zone
-                  ? `${zone.fee.toLocaleString('fr-FR')} ${SITE.currency}`
+                  ? `${zone.approx ? 'à partir de ' : ''}${zone.fee.toLocaleString('fr-FR')} ${SITE.currency}`
                   : 'Choisissez un quartier'}
               </dd>
             </div>
             {zone ? (
               <div className="flex justify-between border-t border-border/60 pt-1.5">
-                <dt className="font-semibold">Total estimé</dt>
+                <dt className="font-semibold">
+                  Total estimé{zone.approx ? ' (livraison à confirmer)' : ''}
+                </dt>
                 <dd className="font-display text-base text-accent">
+                  {zone.approx ? 'à partir de ' : ''}
                   {total.toLocaleString('fr-FR')} {SITE.currency}
                 </dd>
               </div>
@@ -339,7 +341,6 @@ export function OrderForm() {
     </section>
   )
 }
-
 function Field({
   id,
   label,
