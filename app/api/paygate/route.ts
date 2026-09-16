@@ -58,6 +58,7 @@ export async function POST(request: Request) {
   returnUrl.searchParams.set('l', location)
   returnUrl.searchParams.set('z', zone.label)
   returnUrl.searchParams.set('f', String(zone.fee))
+  if (zone.approx) returnUrl.searchParams.set('x', '1')
   returnUrl.searchParams.set('a', String(amount))
 
   const pay = new URL(PAYGATE_PAGE)
