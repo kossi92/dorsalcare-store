@@ -1,6 +1,19 @@
-// Identifiant du Pixel Facebook, fourni via la variable d'environnement.
-// Ajoutez NEXT_PUBLIC_FACEBOOK_PIXEL_ID dans les réglages du projet (Vars).
-export const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID ?? ''
+// Pixels Facebook chargés sur le site. Chaque événement (PageView, ViewContent,
+// InitiateCheckout, Lead, Purchase…) est envoyé à TOUS ces pixels.
+//
+// 1) Pixel(s) fourni(s) via la variable d'environnement Vercel
+//    NEXT_PUBLIC_FACEBOOK_PIXEL_ID (pixel MK_EXPRESS Bazaar Ads). Plusieurs
+//    identifiants peuvent être séparés par des virgules.
+// 2) « Pixel KossiDetox » du compte publicitaire Paul Atila, toujours chargé.
+const KOSSIDETOX_PIXEL_ID = '943686954774735'
+
+export const FB_PIXEL_IDS: string[] = Array.from(
+  new Set(
+    [...(process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID ?? '').split(','), KOSSIDETOX_PIXEL_ID]
+      .map((id) => id.trim())
+      .filter((id) => /^\d+$/.test(id)),
+  ),
+)
 
 type FbEventName =
   | 'PageView'
