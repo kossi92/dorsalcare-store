@@ -8,10 +8,35 @@ export function StickyCta() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > 600)
+    // Visible après le haut de page, mais masquée quand le formulaire de
+    // commande est à l'écran (elle cacherait le bouton d'envoi).
+    let pastHero = false
+    let formVisible = false
+    const update = () => setShow(pastHero && !formVisible)
+
+    const onScroll = () => {
+      pastHero = window.scrollY > 600
+      update()
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+
+    const form = document.getElementById('commander')
+    const observer = form
+      ? new IntersectionObserver(
+          ([entry]) => {
+            formVisible = entry.isIntersecting
+            update()
+          },
+          { threshold: 0.05 },
+        )
+      : null
+    if (form && observer) observer.observe(form)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      observer?.disconnect()
+    }
   }, [])
 
   return (

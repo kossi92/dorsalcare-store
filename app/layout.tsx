@@ -17,11 +17,30 @@ const anton = Anton({
   display: 'swap',
 })
 
+const SITE_URL = 'https://dorsalcare-store.vercel.app'
+const TITLE = 'DorsalCare — Civière Dorsale | Soulagez votre dos en 5 min/jour'
+const DESCRIPTION =
+  'Civière dorsale DorsalCare à 5 000 FCFA au lieu de 10 000. Paiement à la livraison ou Mobile Money. Livraison rapide à Lomé et au Togo. Commandez en 1 minute sur WhatsApp.'
+
 export const metadata: Metadata = {
-  title: 'DorsalCare — Civière Dorsale | Soulagez votre dos en 5 min/jour',
-  description:
-    "Dites adieu aux douleurs de dos, lombaires, sciatique et tensions. La civière dorsale DorsalCare à 5 000 FCFA. Livraison rapide. Commandez en 1 minute sur WhatsApp.",
-  generator: 'v0.app',
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  applicationName: 'DorsalCare',
+  openGraph: {
+    type: 'website',
+    locale: 'fr_FR',
+    url: SITE_URL,
+    siteName: 'DorsalCare',
+    title: 'Libère ton dos, retrouve ta vie ! — Civière dorsale à 5 000 FCFA',
+    description:
+      'Soulage ton dos en 5 minutes par jour, chez toi. Paiement à la livraison • Livraison rapide à Lomé.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'DorsalCare — Civière dorsale à 5 000 FCFA',
+    description: 'Soulage ton dos en 5 minutes par jour. Paiement à la livraison à Lomé.',
+  },
 }
 
 export const viewport: Viewport = {

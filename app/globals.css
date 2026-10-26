@@ -176,3 +176,11 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Masque la barre de défilement (galerie photos glissable) */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

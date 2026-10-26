@@ -1,11 +1,11 @@
 import { ChevronDown } from 'lucide-react'
 import { Reveal } from '@/components/reveal'
-import { SITE } from '@/lib/site'
+import { SITE, priceFor } from '@/lib/site'
 
 const faqs = [
   {
     q: 'Combien coûte la civière dorsale ?',
-    a: `La civière dorsale ${SITE.brand} est à ${SITE.price.toLocaleString('fr-FR')} ${SITE.currency} au lieu de ${SITE.oldPrice.toLocaleString('fr-FR')} ${SITE.currency}, soit -50% pendant l'offre.`,
+    a: `La civière dorsale ${SITE.brand} est à ${SITE.price.toLocaleString('fr-FR')} ${SITE.currency} au lieu de ${SITE.oldPrice.toLocaleString('fr-FR')} ${SITE.currency}, soit -50% pendant l'offre. Pack Duo (2 civières) : ${priceFor(2).toLocaleString('fr-FR')} ${SITE.currency}. Pack Famille (3 civières) : ${priceFor(3).toLocaleString('fr-FR')} ${SITE.currency}. La livraison est en plus, selon votre quartier.`,
   },
   {
     q: 'Comment se passe la livraison ?',

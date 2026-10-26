@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { CheckCircle2, ArrowLeft } from 'lucide-react'
-import { SITE, buildOrderMessage, buildWhatsAppLink } from '@/lib/site'
+import { SITE, buildOrderMessage, buildWhatsAppLink, priceFor } from '@/lib/site'
 import { PurchaseTracker } from './purchase-tracker'
 
 export const metadata = {
@@ -25,7 +25,7 @@ export default async function PaymentReturnPage({
   const deliveryFee = deliveryFeeRaw ? Math.max(0, Math.floor(Number(deliveryFeeRaw))) : undefined
   const approxDelivery = get('x') === '1'
   const quantity = Math.max(1, Math.floor(Number(get('q')) || 1))
-  const subtotal = Math.max(0, Math.floor(Number(get('a')) || SITE.price * quantity))
+  const subtotal = Math.max(0, Math.floor(Number(get('a')) || priceFor(quantity)))
 
   const message = buildOrderMessage({
     firstName,

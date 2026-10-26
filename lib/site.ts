@@ -11,6 +11,39 @@ export const SITE = {
   deliveryFee: 1500,
 } as const
 
+// Prix dégressifs : plus le client en prend, moins l'unité coûte.
+// Le premier palier (1 unité) reste toujours au prix de SITE.price.
+// Pour changer les prix des packs, modifiez uniquement `unit` ci-dessous.
+const PRICE_TIERS = [
+  { min: 3, unit: 4200 }, // Pack Famille et plus : 4 200 FCFA l'unité
+  { min: 2, unit: 4500 }, // Pack Duo : 4 500 FCFA l'unité
+  { min: 1, unit: SITE.price },
+] as const
+
+/** Prix unitaire appliqué pour une quantité donnée. */
+export function unitPriceFor(quantity: number): number {
+  const q = Math.max(1, Math.floor(quantity))
+  return (PRICE_TIERS.find((t) => q >= t.min) ?? PRICE_TIERS[PRICE_TIERS.length - 1]).unit
+}
+
+/** Montant total des produits (hors livraison) pour une quantité donnée. */
+export function priceFor(quantity: number): number {
+  const q = Math.max(1, Math.floor(quantity))
+  return unitPriceFor(q) * q
+}
+
+/** Économie réalisée par rapport au prix unitaire de base. */
+export function savingsFor(quantity: number): number {
+  const q = Math.max(1, Math.floor(quantity))
+  return SITE.price * q - priceFor(q)
+}
+
+export const PACKS = [
+  { id: 'solo', quantity: 1, name: 'Solo', desc: '1 civière' },
+  { id: 'duo', quantity: 2, name: 'Pack Duo', desc: '2 civières — pour vous et votre conjoint(e)' },
+  { id: 'famille', quantity: 3, name: 'Pack Famille', desc: '3 civières — pour toute la famille' },
+] as const
+
 // Zones de livraison couvertes, basées sur la grille tarifaire réelle de
 // KOSSI DETOX. `approx: true` signale un tarif non garanti (chauffeur
 // indépendant, distance variable) — affiché comme "à partir de" et confirmé
@@ -98,7 +131,7 @@ o.zoneLabel && o.location ? ` (${o.location})` : ''
 }`,
 '',
 `💰 Produit : ${o.subtotal.toLocaleString('fr-FR')} ${SITE.currency} ` +
-`(${o.quantity} x ${SITE.price.toLocaleString('fr-FR')} ${SITE.currency})`,
+`(${o.quantity} x ${unitPriceFor(o.quantity).toLocaleString('fr-FR')} ${SITE.currency})`,
 ]
 if (hasDelivery) {
 lines.push(

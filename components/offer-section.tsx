@@ -1,5 +1,5 @@
 import { Flame, Zap } from 'lucide-react'
-import { SITE } from '@/lib/site'
+import { SITE, priceFor } from '@/lib/site'
 import { Countdown } from '@/components/countdown'
 import { Reveal } from '@/components/reveal'
 
@@ -32,6 +32,21 @@ export function OfferSection() {
 
             <div className="mx-auto mt-3 w-fit rounded-full bg-danger/15 px-3 py-1 text-sm font-bold text-danger">
               -50% de réduction immédiate
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-2 text-left">
+              <div className="rounded-xl border border-border bg-background/60 p-3">
+                <span className="block text-xs font-semibold text-muted-foreground">Pack Duo · 2</span>
+                <span className="font-display text-xl text-accent">
+                  {priceFor(2).toLocaleString('fr-FR')} {SITE.currency}
+                </span>
+              </div>
+              <div className="rounded-xl border border-border bg-background/60 p-3">
+                <span className="block text-xs font-semibold text-muted-foreground">Pack Famille · 3</span>
+                <span className="font-display text-xl text-accent">
+                  {priceFor(3).toLocaleString('fr-FR')} {SITE.currency}
+                </span>
+              </div>
             </div>
 
             <div className="mt-5 rounded-xl border border-danger/40 bg-danger/10 p-3">

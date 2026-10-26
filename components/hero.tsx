@@ -1,5 +1,6 @@
 import Image from 'next/image'
-import { HeartPulse, Star, Clock } from 'lucide-react'
+import { Star, Clock } from 'lucide-react'
+import { Logo } from '@/components/logo'
 import { SITE } from '@/lib/site'
 import { Countdown } from '@/components/countdown'
 
@@ -18,14 +19,7 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-md">
         {/* brand */}
-        <div className="mb-6 flex items-center justify-center gap-2">
-          <span className="grid size-8 place-items-center rounded-lg bg-primary text-primary-foreground">
-            <HeartPulse className="size-5" aria-hidden />
-          </span>
-          <span className="font-display text-xl tracking-wide">
-            Dorsal<span className="text-primary">Care</span>
-          </span>
-        </div>
+        <Logo className="mb-6" />
 
         {/* rating chip */}
         <div className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-xs animate-fade-up">

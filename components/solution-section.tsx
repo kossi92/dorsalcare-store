@@ -28,8 +28,8 @@ export function SolutionSection() {
               playsInline
               muted
               loop
-              preload="metadata"
-              poster="/images/product-detail.png"
+              preload="none"
+              poster="/videos/demo-poster.jpg"
             >
               <source src="/videos/demo.mp4" type="video/mp4" />
               Votre navigateur ne supporte pas la lecture vidéo.

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { SITE, getDeliveryZone } from '@/lib/site'
+import { SITE, getDeliveryZone, priceFor } from '@/lib/site'
 
 // PayGate Global (Togo) — passerelle Mixx by Yas (T-Money) + Flooz (Moov).
 // Le token marchand reste côté serveur (jamais exposé au navigateur).
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   }
 
   // Montant recalculé côté serveur (jamais depuis le client).
-  const amount = SITE.price * quantity
+  const amount = priceFor(quantity)
 
   // Identifiant de commande unique.
   const identifier = `DC-${Date.now().toString(36)}-${Math.random()

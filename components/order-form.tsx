@@ -14,7 +14,15 @@ import {
   Smartphone,
   Loader2,
 } from 'lucide-react'
-import { SITE, DELIVERY_ZONES, buildWhatsAppLink, buildOrderMessage } from '@/lib/site'
+import {
+  SITE,
+  DELIVERY_ZONES,
+  PACKS,
+  buildWhatsAppLink,
+  buildOrderMessage,
+  priceFor,
+  savingsFor,
+} from '@/lib/site'
 import { fbTrack } from '@/lib/fbpixel'
 
 type PaymentMethod = 'cod' | 'mobile'
@@ -30,7 +38,8 @@ export function OrderForm() {
   const [payError, setPayError] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const subtotal = useMemo(() => SITE.price * quantity, [quantity])
+  const subtotal = useMemo(() => priceFor(quantity), [quantity])
+  const savings = savingsFor(quantity)
   const zone = useMemo(() => DELIVERY_ZONES.find((z) => z.id === zoneId), [zoneId])
   const total = subtotal + (zone?.fee ?? 0)
 
@@ -163,12 +172,58 @@ export function OrderForm() {
             />
           </Field>
 
-          {/* Quantité */}
-          <div className="mt-4">
-            <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">
-              Quantité
-            </label>
-            <div className="flex items-center justify-between rounded-xl border border-input bg-background px-2 py-2">
+          {/* Choix du pack */}
+          <fieldset className="mt-4">
+            <legend className="mb-1.5 block text-xs font-semibold text-muted-foreground">
+              Choisissez votre offre
+            </legend>
+            <div className="grid gap-2">
+              {PACKS.map((pack) => {
+                const active = quantity === pack.quantity
+                const packSavings = savingsFor(pack.quantity)
+                return (
+                  <button
+                    key={pack.id}
+                    type="button"
+                    onClick={() => setQuantity(pack.quantity)}
+                    aria-pressed={active}
+                    className={`relative flex items-center gap-3 rounded-xl border p-3 text-left transition active:scale-[0.99] ${
+                      active
+                        ? 'border-accent bg-accent/10 ring-1 ring-accent'
+                        : 'border-input bg-background'
+                    }`}
+                  >
+                    <span
+                      className={`grid size-5 shrink-0 place-items-center rounded-full border ${
+                        active ? 'border-accent bg-accent' : 'border-input'
+                      }`}
+                    >
+                      {active ? <span className="size-2 rounded-full bg-accent-foreground" /> : null}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="flex flex-wrap items-center gap-1.5 text-sm font-semibold">
+                        {pack.name}
+                        {packSavings > 0 ? (
+                          <span className="rounded-full bg-success/15 px-2 py-0.5 text-[0.65rem] font-bold text-success">
+                            -{packSavings.toLocaleString('fr-FR')} {SITE.currency}
+                          </span>
+                        ) : null}
+                      </span>
+                      <span className="block text-xs text-muted-foreground">{pack.desc}</span>
+                    </span>
+                    <span className="shrink-0 text-right">
+                      <span className="block font-display text-lg leading-none text-accent">
+                        {priceFor(pack.quantity).toLocaleString('fr-FR')}
+                      </span>
+                      <span className="text-[0.65rem] text-muted-foreground">{SITE.currency}</span>
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Autre quantité */}
+            <div className="mt-2 flex items-center justify-between rounded-xl border border-input bg-background px-2 py-2">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -181,6 +236,9 @@ export function OrderForm() {
               <div className="flex items-center gap-2">
                 <Hash className="size-4 text-muted-foreground" aria-hidden />
                 <span className="font-display text-2xl tabular-nums">{quantity}</span>
+                <span className="text-xs text-muted-foreground">
+                  {quantity > 1 ? 'civières' : 'civière'}
+                </span>
               </div>
               <button
                 type="button"
@@ -191,7 +249,8 @@ export function OrderForm() {
                 <Plus className="size-4" aria-hidden />
               </button>
             </div>
-          </div>
+          </fieldset>
+
           {/* Quartier / zone de livraison */}
           <div className="mt-4">
             <label
@@ -278,6 +337,14 @@ export function OrderForm() {
                 {subtotal.toLocaleString('fr-FR')} {SITE.currency}
               </dd>
             </div>
+            {savings > 0 ? (
+              <div className="flex justify-between">
+                <dt className="text-muted-foreground">Votre économie</dt>
+                <dd className="font-semibold text-success">
+                  -{savings.toLocaleString('fr-FR')} {SITE.currency}
+                </dd>
+              </div>
+            ) : null}
             <div className="flex justify-between">
               <dt className="text-muted-foreground">
                 Livraison{zone ? ` — ${zone.label}` : ''}
