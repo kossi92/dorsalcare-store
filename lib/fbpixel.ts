@@ -5,11 +5,17 @@
 //    NEXT_PUBLIC_FACEBOOK_PIXEL_ID (pixel MK_EXPRESS Bazaar Ads). Plusieurs
 //    identifiants peuvent être séparés par des virgules.
 // 2) « Pixel KossiDetox » du compte publicitaire Paul Atila, toujours chargé.
+// 3) « zozo achat » du compte publicitaire zozo (Mkexpress bazar), toujours chargé.
 const KOSSIDETOX_PIXEL_ID = '943686954774735'
+const ZOZO_ACHAT_PIXEL_ID = '1555207795878538'
 
 export const FB_PIXEL_IDS: string[] = Array.from(
   new Set(
-    [...(process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID ?? '').split(','), KOSSIDETOX_PIXEL_ID]
+    [
+      ...(process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID ?? '').split(','),
+      KOSSIDETOX_PIXEL_ID,
+      ZOZO_ACHAT_PIXEL_ID,
+    ]
       .map((id) => id.trim())
       .filter((id) => /^\d+$/.test(id)),
   ),

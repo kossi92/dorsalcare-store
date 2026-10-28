@@ -6,7 +6,7 @@ import { FB_PIXEL_IDS, fbTrack } from '@/lib/fbpixel'
 import { SITE } from '@/lib/site'
 
 /**
- * Charge et initialise les Pixels Facebook (MK_EXPRESS + KossiDetox),
+ * Charge et initialise les Pixels Facebook (MK_EXPRESS + KossiDetox + zozo achat),
  * envoie le PageView, puis un ViewContent (vue de la page produit).
  * Chaque événement part vers tous les pixels initialisés.
  * Ne rend rien si aucun Pixel ID n'est configuré.
