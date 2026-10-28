@@ -110,6 +110,16 @@ export function OrderForm() {
       approxDelivery: zone?.approx,
       subtotal,
     })
+    // Commande validée en paiement à la livraison : comptée comme un Achat
+    // pour que les campagnes Ventes (événement « Achat ») puissent optimiser.
+    fbTrack('Purchase', {
+      content_name: SITE.product,
+      content_type: 'product',
+      currency: 'XOF',
+      value: subtotal,
+      quantity,
+      payment_method: 'cash_on_delivery',
+    })
     fbTrack('Contact', { method: 'whatsapp' })
     window.open(buildWhatsAppLink(message), '_blank', 'noopener,noreferrer')
   }
